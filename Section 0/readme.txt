@@ -1,1 +1,1 @@
-This is the folder for first weeks submission
+This is the folder for first sections task submissions
