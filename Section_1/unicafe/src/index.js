@@ -45,11 +45,12 @@ import ReactDOM from 'react-dom';
           </div>
           <h1>Statistiikka</h1>
             <div>
-            Hyvä {this.state.hyvä} <br></br>
-            Neutraali{this.state.neutraali} <br></br>
-            Huono {this.state.huono} <br></br>
-            <br></br>
-            Äänet yhteensä : {this.state.yhteensä}
+            Hyvä : {this.state.hyvä} <br></br>
+            Neutraali : {this.state.neutraali} <br></br>
+            Huono : {this.state.huono} <br></br><br></br>
+            Äänet yhteensä : {this.state.yhteensä} <br></br><br></br>
+            Keskiarvo : {Math.round((this.state.hyvä - this.state.huono) / this.state.yhteensä * 10) /10 } <br></br>
+            Positiivisia : {Math.round((this.state.hyvä / this.state.yhteensä) * 100 * 10) / 10} % <br></br>
             </div>
         </div>
       )
