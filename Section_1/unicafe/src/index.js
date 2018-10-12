@@ -68,45 +68,48 @@ import ReactDOM from 'react-dom';
         )
     }
     return (
-        <div>
-            <Statistic
-                text="Hyviä ääniä"
-                arvo={hyvä}
-                lisäteksti=" kpl"
-            />
-            <Statistic
-                text="Neutraaleja ääniä"
-                arvo={neutraali}
-                lisäteksti=" kpl"
-            />
-            <Statistic
-                text="Huonoja ääniä"
-                arvo={huono}
-                lisäteksti=" kpl"
-            />
-            <Statistic
-                text="Yhteensä ääniä"
-                arvo={yhteensä}
-                lisäteksti=" kpl"
-            />
-            <Statistic
-                text="Keskiarvo"
-                arvo={Math.round((hyvä - huono) / yhteensä *10) / 10}
-                lisäteksti="/1"
-            />
-            <Statistic
-                text="Positiivisia"
-                arvo={Math.round((hyvä / yhteensä) * 100 * 10) / 10}
-                lisäteksti="%"
-            />
-        </div>
+        <table>
+            <tbody>
+                <Statistic
+                    text="Hyviä ääniä"
+                    arvo={hyvä}
+                    lisäteksti=" kpl"
+                />
+                <Statistic
+                    text="Neutraaleja ääniä"
+                    arvo={neutraali}
+                    lisäteksti=" kpl"
+                />
+                <Statistic
+                    text="Huonoja ääniä"
+                    arvo={huono}
+                    lisäteksti=" kpl"
+                />
+                <Statistic
+                    text="Yhteensä ääniä"
+                    arvo={yhteensä}
+                    lisäteksti=" kpl"
+                />
+                <Statistic
+                    text="Keskiarvo"
+                    arvo={Math.round((hyvä - huono) / yhteensä *10) / 10}
+                    lisäteksti="/1"
+                />
+                <Statistic
+                    text="Positiivisia"
+                    arvo={Math.round((hyvä / yhteensä) * 100 * 10) / 10}
+                    lisäteksti="%"
+                />
+            </tbody>
+        </table>
     )
   }
 
   const Statistic = ({text, arvo, lisäteksti}) => (
-    <div>
-        {text} : {arvo}{lisäteksti}
-    </div>
+    <tr>
+        <td>{text} : </td> 
+        <td>{arvo}{lisäteksti}</td>
+    </tr>
   )
     
 
