@@ -12,29 +12,14 @@ import ReactDOM from 'react-dom';
       }
     }
   
-    klikHyvä = () =>
-        () => {
-          this.setState({
-            hyvä: this.state.hyvä + 1,
-            yhteensä: this.state.yhteensä + 1
-        })
-      }
-
-    klikNeutraali = () =>
-    () => {
-      this.setState({
-        neutraali: this.state.neutraali + 1,
-        yhteensä: this.state.yhteensä + 1
-      })
+    kasvata = (parametri) => {
+        return () => {
+            this.setState({
+                [parametri] : this.state[parametri] + 1,
+                yhteensä : this.state.yhteensä + 1
+            })
+        }
     }
-
-    klikHuono = () =>
-    () => {
-        this.setState({
-            huono: this.state.huono + 1,
-            yhteensä: this.state.yhteensä + 1
-        })
-      }
   
     render() {
       return (
@@ -42,15 +27,15 @@ import ReactDOM from 'react-dom';
         <h1>Anna palautetta</h1>
           <div>          
             <Button 
-                handleClick={this.klikHyvä()}
+                handleClick={this.kasvata('hyvä')}
                 text="Hyvä"
             />
             <Button 
-                handleClick={this.klikNeutraali()}
+                handleClick={this.kasvata('neutraali')}
                 text="Neutraali"
             />
             <Button 
-                handleClick={this.klikHuono()}
+                handleClick={this.kasvata('huono')}
                 text="Huono"
             />
           </div>
