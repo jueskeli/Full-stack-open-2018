@@ -12,21 +12,24 @@ import ReactDOM from 'react-dom';
       }
     }
   
-    klikHyvä = () => {
-      this.setState({
-        hyvä: this.state.hyvä + 1,
-        yhteensä: this.state.yhteensä + 1
-      })
-    }
-  
-    klikNeutraali = () => {
+    klikHyvä = () =>
+        () => {
+          this.setState({
+            hyvä: this.state.hyvä + 1,
+            yhteensä: this.state.yhteensä + 1
+        })
+      }
+
+    klikNeutraali = () =>
+    () => {
       this.setState({
         neutraali: this.state.neutraali + 1,
         yhteensä: this.state.yhteensä + 1
       })
     }
 
-    klikHuono = () => {
+    klikHuono = () =>
+    () => {
         this.setState({
             huono: this.state.huono + 1,
             yhteensä: this.state.yhteensä + 1
@@ -38,24 +41,80 @@ import ReactDOM from 'react-dom';
         <div>
         <h1>Anna palautetta</h1>
           <div>          
-            <button onClick={this.klikHyvä}>hyvä</button>
-            <button onClick={this.klikNeutraali}>neutraali</button>
-            <button onClick={this.klikHuono}>huono</button>
-
+            <Button 
+                handleClick={this.klikHyvä()}
+                text="Hyvä"
+            />
+            <Button 
+                handleClick={this.klikNeutraali()}
+                text="Neutraali"
+            />
+            <Button 
+                handleClick={this.klikHuono()}
+                text="Huono"
+            />
           </div>
           <h1>Statistiikka</h1>
             <div>
-            Hyvä : {this.state.hyvä} <br></br>
-            Neutraali : {this.state.neutraali} <br></br>
-            Huono : {this.state.huono} <br></br><br></br>
-            Äänet yhteensä : {this.state.yhteensä} <br></br><br></br>
-            Keskiarvo : {Math.round((this.state.hyvä - this.state.huono) / this.state.yhteensä * 10) /10 } <br></br>
-            Positiivisia : {Math.round((this.state.hyvä / this.state.yhteensä) * 100 * 10) / 10} % <br></br>
+                <Statistics
+                    hyvä={this.state.hyvä}
+                    neutraali={this.state.neutraali}
+                    huono={this.state.huono}
+                    yhteensä={this.state.yhteensä}
+                />          
             </div>
         </div>
       )
     }
   }
+
+  const Button = ({handleClick, text}) => (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+
+  const Statistics = ({hyvä, neutraali, huono, yhteensä}) => (
+    <div>
+        <Statistic
+            text="Hyviä ääniä"
+            arvo={hyvä}
+            lisäteksti=" kpl"
+        />
+        <Statistic
+            text="Neutraaleja ääniä"
+            arvo={neutraali}
+            lisäteksti=" kpl"
+        />
+        <Statistic
+            text="Huonoja ääniä"
+            arvo={huono}
+            lisäteksti=" kpl"
+        />
+        <Statistic
+            text="Yhteensä ääniä"
+            arvo={yhteensä}
+            lisäteksti=" kpl"
+        />
+        <Statistic
+            text="Keskiarvo"
+            arvo={Math.round((hyvä - huono) / yhteensä *10) / 10}
+            lisäteksti="/1"
+        />
+        <Statistic
+            text="Positiivisia"
+            arvo={Math.round((hyvä / yhteensä) * 100 * 10) / 10}
+            lisäteksti="%"
+        />
+    </div>
+  )
+
+  const Statistic = ({text, arvo, lisäteksti}) => (
+    <div>
+        {text} : {arvo}{lisäteksti}
+    </div>
+  )
+    
 
   ReactDOM.render(
     <App />,
