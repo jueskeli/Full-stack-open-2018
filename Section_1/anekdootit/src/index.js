@@ -5,7 +5,13 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: 0
+      selected: 0,
+      votes: [0, 0, 0, 0, 0, 0]
+    }
+    this.kasvata = function(kohta) {
+        const uudet_äänet = [...this.state.votes]
+        uudet_äänet[kohta] += 1
+        return uudet_äänet
     }
   }
 
@@ -15,14 +21,28 @@ class App extends React.Component {
            selected : (Math.random() * (5 - 0 + 1) ) << 0
         })
     }
-}
+   }
+
+  ääni = (new_votes) => {
+    return () => {
+        this.setState({
+            votes : new_votes
+        })
+    }
+   }
+
   render() {
     return (
       <div>
         <h1>Arvotaan anekdootti :</h1>
         {this.props.anecdotes[this.state.selected]} <br></br>
+        ääniä : {this.state.votes[this.state.selected]} <br></br>
         <Button 
-                handleClick={this.uusi()}
+                handleClick={this.ääni(this.kasvata(this.state.selected))}
+                text="Anna ääni"
+            />
+        <Button 
+                handleClick={this.uusi(this.state.votes[this.state.selected])}
                 text="Uusi anekdootti"
             />
       </div>
