@@ -6,12 +6,16 @@ class App extends React.Component {
     super(props)
     this.state = {
       selected: 0,
-      votes: [0, 0, 0, 0, 0, 0]
+      votes : [0,0,0,0,0,0]
     }
     this.kasvata = function(kohta) {
         const uudet_äänet = [...this.state.votes]
         uudet_äänet[kohta] += 1
         return uudet_äänet
+    }
+    this.eniten = function() {
+        var highest = this.state.votes.indexOf(Math.max(...this.state.votes))
+        return highest
     }
   }
 
@@ -45,6 +49,9 @@ class App extends React.Component {
                 handleClick={this.uusi(this.state.votes[this.state.selected])}
                 text="Uusi anekdootti"
             />
+        <h1>Eniten ääniä saanut:</h1>
+        {this.props.anecdotes[this.eniten()]} <br></br>
+        ääniä : {Math.max(...this.state.votes)}
       </div>
     )
   }
