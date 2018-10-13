@@ -7,62 +7,77 @@ const App = () => {
         osat: [
           {
             nimi: 'Reactin perusteet',
-            tehtavia: 10
+            tehtavia: 10,
+            id : 1
           },
           {
             nimi: 'Tiedonvälitys propseilla',
-            tehtavia: 7
+            tehtavia: 7,
+            id: 2
           },
           {
             nimi: 'Komponenttien tila',
-            tehtavia: 14
+            tehtavia: 14,
+            id: 3
           }
         ]
       }
   return (
     <div>
-      <Otsikko kurssi={kurssi.nimi}/>
-      <Sisalto osat={kurssi.osat}/>
-      <Yhteensa osat={kurssi.osat}/>
+      <Kurssi kurssi={kurssi}/>
     </div>
   )
 }
 
-const Otsikko = (props) => {
-  
+const Kurssi = (props) => {
+    const sisalto = props.kurssi.osat.map(osa => osa)
     return (
       <div>
-        <h1>{props.kurssi}</h1>
+        <Otsikko nimi ={props.kurssi.nimi}/>
+        <Sisalto sisalto= {sisalto}/>
+        <Yhteensa sisalto={sisalto}/>
+      </div>
+    ) 
+}
+
+const Otsikko = (props) => {
+    return (
+      <div>
+        <h1>{props.nimi}</h1>
       </div>
     )
   }
 
 
 const Sisalto = (props) => {
-  
     return (
       <div>
-        <Osa osa={props.osat[0]}/>
-        <Osa osa={props.osat[1]}/>
-        <Osa osa={props.osat[2]}/>
+          { props.sisalto.map(item =>
+            <div key={item.id}>
+              {
+                <Osa nimi={item.nimi} tehtavia={item.tehtavia}/>
+              }
+            </div>
+            )}
       </div>
     )
 }
 
 const Osa = (props) => {
-  
     return (
       <div>
-        <p>{props.osa.nimi} {props.osa.tehtavia}</p>
+        <p>{props.nimi} {props.tehtavia}</p>
       </div>
     )
 }
 
 const Yhteensa = (props) => {
-  
+  console.log(props)
     return (
       <div>
-        <p>yhteensä {props.osat[0].tehtavia + props.osat[1].tehtavia + props.osat[2].tehtavia} tehtävää</p>
+          Yhteensä :{props.sisalto.reduce(function(sum, osa){
+              return sum + osa.tehtavia
+          }, 0)}
       </div>
     )
 }
