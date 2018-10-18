@@ -1,5 +1,6 @@
 import React from 'react';
 import Numero from './components/Numero'
+import HenkiloLisays from './components/HenkiloLisays'
 
 class App extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class App extends React.Component {
 
   render() {
     const namesToShow =
-      this.state.persons.filter(person => person.name.includes(this.state.showOnly))
+    this.state.persons.filter(person => person.name.includes(this.state.showOnly))
     return (
       <div>
         <h3>haku</h3>
@@ -63,17 +64,12 @@ class App extends React.Component {
         </div>
         </form>
         <h2>Puhelinluettelo</h2>
-        <form onSubmit={this.addName}>
-          <div>
-            nimi: <input value={this.state.newName} onChange={this.handleNameChange}/>
-          </div>
-          <div>
-            numero: <input value={this.state.newNumber} onChange={this.handleNumberChange}/>
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
+        <div>
+          <HenkiloLisays state={this.state}
+          onSubmit={this.addName}
+          handleNameChange={this.handleNameChange}
+          handleNumberChange={this.handleNumberChange} />
+        </div>
         <h2>Numerot</h2>
         <div>
            <Numero props={namesToShow} showOnly={this.state.showOnly} />
