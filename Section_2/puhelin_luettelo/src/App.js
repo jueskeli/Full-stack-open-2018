@@ -15,21 +15,26 @@ class App extends React.Component {
   addName = (event) => {
     event.preventDefault()
     console.log('nappia painettu')
-    const bookObject ={
-      name: this.state.newName
+       const bookObject ={
+         name: this.state.newName
+       }
+    if(this.state.persons.some(person => person.name === this.state.newName) === false){
+        const persons = this.state.persons.concat(bookObject)  
+        this.setState({
+           persons : persons,
+           newName : 'anna uusi nimi'
+         })
     }
-
-    const persons = this.state.persons.concat(bookObject)
-
-    this.setState({
-      persons : persons,
-      newName : 'anna uusi nimi'
-    })
+    else alert('NIMI LÖYTYY JO OSOITEKIRJASTA')
   }
 
   handleChange = (event) => {
     console.log(event.target.value)
     this.setState({newName : event.target.value})
+  }
+
+  showNames = (persons) => {
+    
   }
 
   render() {
@@ -45,9 +50,9 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <ul>
-    {this.state.persons.map(person => <li key={person.name}>{person.name}</li>)}
-        </ul>
+        <div>
+           <Numero props={this.state.persons} />
+        </div>
       </div>
     )
   }

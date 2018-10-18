@@ -3,9 +3,9 @@ import React from 'react';
 const Numero = (props) => {
     console.log(props)
       return (
-        <li>
-             {props.nimi}
-        </li>
+        <ul>
+             {props.props.map(person => <li key={person.name}>{person.name}</li>)}
+        </ul>
       )
   }
   
