@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Numero from './components/Numero'
 import HenkiloLisays from './components/HenkiloLisays'
 
@@ -16,6 +17,16 @@ class App extends React.Component {
       newNumber: '000-00000000',
       showOnly: ''
     }
+  }
+
+  componentDidMount() {
+    console.log('did mount')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fullfilled')
+        this.setState({ persons: response.data})
+      })
   }
 
   addName = (event) => {
