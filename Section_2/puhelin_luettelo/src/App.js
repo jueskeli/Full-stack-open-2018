@@ -31,14 +31,18 @@ class App extends React.Component {
          name: this.state.newName,
          number: this.state.newNumber
        }
+
     if(this.state.persons.some(person => person.name === this.state.newName) === false &&
-       this.state.persons.some(person => person.number === this.state.newNumber) === false){
-        const persons = this.state.persons.concat(bookObject)  
-        this.setState({
-           persons : persons,
-           newName : 'anna uusi nimi',
-           newNumber : '000-0000000'
-         })
+       this.state.persons.some(person => person.number === this.state.newNumber) === false){  
+        axios
+          .post('http://localhost:3001/persons', bookObject)
+          .then(response => {         
+            this.setState({
+               persons : this.state.persons.concat(response.data),
+               newName : 'anna uusi nimi',
+               newNumber : '000-0000000'
+            })
+           })
     }
     else alert('NIMI TAI NUMERO LÖYTYY JO OSOITEKIRJASTA')
   }
