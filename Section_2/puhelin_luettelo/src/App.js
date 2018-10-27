@@ -1,7 +1,7 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
 import Numero from './components/Numero'
 import HenkiloLisays from './components/HenkiloLisays'
+import henkiloPalvelu from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -16,11 +16,10 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log('did mount')
-    axios
-      .get('http://localhost:3001/persons')
+    henkiloPalvelu
+      .getAll()
       .then(response => {
-        console.log('promise fullfilled')
-        this.setState({ persons: response.data})
+        this.setState({persons : response})
       })
   }
 
@@ -31,20 +30,39 @@ class App extends React.Component {
          name: this.state.newName,
          number: this.state.newNumber
        }
-
-    if(this.state.persons.some(person => person.name === this.state.newName) === false &&
-       this.state.persons.some(person => person.number === this.state.newNumber) === false){  
-        axios
-          .post('http://localhost:3001/persons', bookObject)
-          .then(response => {         
-            this.setState({
-               persons : this.state.persons.concat(response.data),
-               newName : 'anna uusi nimi',
-               newNumber : '000-0000000'
-            })
-           })
+    henkiloPalvelu
+      .create(bookObject)
+      .then(newPerson => {
+        if(this.state.persons.some(person => person.name === this.state.newName) === false &&
+        this.state.persons.some(person => person.number === this.state.newNumber) === false){ 
+          this.setState({
+            persons : this.state.persons.concat(newPerson),
+            newName : 'anna uusi nimi',
+            newNumber : '000-0000000'
+          })
+        }
+        else alert('NIMI TAI NUMERO LÖYTYY JO OSOITEKIRJASTA')
+      })
     }
-    else alert('NIMI TAI NUMERO LÖYTYY JO OSOITEKIRJASTA')
+
+  removeName = (id) => {
+      console.log('remove')
+      return () => {
+      const henkilo = this.state.persons.filter(person => person.id === id)
+      if (window.confirm(`'Poistetaanko ${henkilo[0].name}`)){
+       henkiloPalvelu
+        .remove(id)
+        .then(
+          console.log('remove successful'),
+          this.setState({
+            persons : this.state.persons.filter(person => person.id !== id),
+          })
+          )
+        .catch(error => {
+          alert(`henkiön ${id}  poisto epäonnistui`)
+        })
+      }
+    }
   }
 
   handleNameChange = (event) => {
@@ -82,7 +100,7 @@ class App extends React.Component {
         </div>
         <h2>Numerot</h2>
         <div>
-           <Numero props={namesToShow} showOnly={this.state.showOnly} />
+           <Numero persons={namesToShow} poista={this.removeName}/>
         </div>
       </div>
     )

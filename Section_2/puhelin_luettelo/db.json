@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Martti Tienari",
-      "number": "040-123456",
-      "id": 2
-    },
-    {
       "name": "Arto J�rvinen",
       "number": "040-123456",
       "id": 3
@@ -21,7 +11,7 @@
       "id": 4
     },
     {
-      "name": "anna uusi nimi",
+      "name": "PEkka Puupaa",
       "number": "000-00000000",
       "id": 5
     }

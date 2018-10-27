@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Numero = (props) => {
-    console.log(props)
+const Numero = ({persons, poista}) => {
+    console.log(persons)
       return (
         <ul>
-             {props.props.map(person => <li key={person.name}>{person.name} {person.number}</li>)}
+             {persons.map(person => <li key={person.id}>{person.name} {person.number} <button onClick={poista(person.id)}> poista</button></li>)}
         </ul>
       )
   }
