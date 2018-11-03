@@ -1,9 +1,13 @@
 const express = require('express')
-var morgan = require('morgan')
+var logger = require('morgan')
 const app = express()
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
+
+logger.token('requestData', function(request, response) {return JSON.stringify(request.body)})
+app.use(logger(':method :url :status :requestData'))
+app.use(logger('tiny'))
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max))
@@ -36,7 +40,6 @@ let persons = [
     },
 ]
 
-app.use(morgan('tiny'))
 
 
 app.get('/', (req, res) => {
