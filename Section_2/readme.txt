@@ -1,1 +1,1 @@
-This is the folder for third sections task submissions
+Puhelinluettelon 3.1 - 3.6 tehtävät on epähuomiossa tehty section-2 kansioon. Tästä eteenpäin jatketaan kopioimalla puhelin_luettelo section 3 kansioon.

@@ -1,4 +1,5 @@
 const express = require('express')
+var morgan = require('morgan')
 const app = express()
 const bodyParser = require('body-parser')
 
@@ -34,6 +35,8 @@ let persons = [
       number: '040-123456'
     },
 ]
+
+app.use(morgan('tiny'))
 
 
 app.get('/', (req, res) => {
