@@ -9,14 +9,26 @@ blogRouter.get('/', (request, response) => {
     })
 })
   
-blogRouter.post('/', (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
+  if(blog.title === undefined || blog.author == undefined || blog.url == undefined) {
+    return response.status(400).json({error: 'title or author missing'})
+  }
+
+  if(blog.likes === undefined) {
+    blog.likes = 0
+  }
+
+  const newBlog = new Blog({
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes,
+  })
+
+  const savedBlog = await newBlog.save()
+  response.json(Blog.format(savedBlog))
 })
 
 module.exports = blogRouter
