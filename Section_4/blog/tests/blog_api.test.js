@@ -2,7 +2,8 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { listWithManyBlogs, listWithOneBlog, format, nonExistingId, blogsInDb} = require('./test_helper')
+const User = require('../models/user')
+const { listWithManyBlogs, listWithOneBlog, nonExistingId, blogsInDb, usersInDb} = require('./test_helper')
 
 describe('Blog API tests', async () => {
   beforeAll(async () => {
@@ -115,7 +116,7 @@ describe('Blog API tests', async () => {
           expect(blog.likes).toBe(0)
         }
       }
-    })
+    })   
   })
   
   describe('Testing DELETE operation', async () => {
@@ -147,6 +148,105 @@ describe('Blog API tests', async () => {
   
 })
 
+describe.only('Add initially one user to the db', async () => {
+
+  beforeAll(async () => {
+    await User.remove({})
+    const user = new User({ username: 'root', password: 'root' })
+    await user.save()
+  })
+
+  test('POST valid user', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'juuso',
+      name: 'Juuso',
+      adult: true,
+      password: 'osuuj'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
+
+    const usernames = usersAfterOperation.map(u=>u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+  
+  test('POST valid user withous adult', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'juuso2',
+      name: 'Juuso',
+      password: 'osuuj'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
+
+    const usernames = usersAfterOperation.map(u=>u.username)
+    expect(usernames).toContain(newUser.username)
+
+    for(let user in usersAfterOperation) {
+      if(user.username === newUser.username){
+        expect(user.adult).toBe(true)
+      }
+    }
+  })
+
+  test('POST invalid user (exists)', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'root',
+      password: 'root'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+  })
+
+  test('POST invalid user (password)', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'osuuj',
+      name: 'Osuuj',
+      adult: false,
+      password: 'jo'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+
+  })
+
+})
 
 afterAll(() => {
   server.close()
