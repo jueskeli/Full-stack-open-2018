@@ -1,0 +1,77 @@
+h1 {
+  color: purple;
+  font-style: italic;
+}
+
+h2 {
+    color: purple;
+    font-style: italic;
+  }
+
+
+h3 {
+    color: purple;
+    font-style: italic;
+  }
+
+.blog {
+  color: rgb(22, 88, 6);
+  padding-top: 5px;
+  font-size: 15px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+    color: rgb(0, 109, 27);
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+button {
+    background-color: rgb(102, 168, 105);
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 3px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+}
+
+input, textarea {
+ display: block;
+ width: 90%;
+ font-size: 16px;
+ line-height: 1.25;
+ color: #55595c;
+ background-color: #fff;
+ border-top: 1px solid $color-grey;
+ border-right: 1px solid $color-grey;
+ border-bottom: 1px solid $color-grey;
+ border-left: 1px solid $color-grey;
+}
+
+textarea {
+ resize: vertical;
+}
+
+form {
+    max-width: 50%;
+    background-color: #fff;
+    border-radius: $radius;
+    box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07);
+}
