@@ -33,8 +33,6 @@ blogRouter.get('/:id', async (request, response) => {
 blogRouter.post('/', async (request, response) => {
   try {
     const body = new Blog(request.body)
-    console.log(body)
-
     
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
@@ -51,14 +49,13 @@ blogRouter.post('/', async (request, response) => {
     }
 
     const user = await User.findById(decodedToken.id)
-    console.log(user)
 
     const newBlog = new Blog({
       title: body.title,
       author: body.author,
       url: body.url,
       likes: body.likes,
-      user: user._id
+      user: user
     })
 
     const savedBlog = await newBlog.save()
@@ -66,7 +63,9 @@ blogRouter.post('/', async (request, response) => {
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
 
-    response.json(Blog.format(savedBlog))
+    const returnBlog = await Blog.findById(savedBlog._id).populate('user', { username: 1, name: 1 } )
+
+    response.json(Blog.format(returnBlog))
 
   } catch(exception) {
 
@@ -84,16 +83,17 @@ blogRouter.post('/', async (request, response) => {
 blogRouter.delete('/:id', async (request, response) => {
   try {
     const blog = await Blog.findById(request.params.id)
-
+    console.log(blog)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
     if (!request.token || !decodedToken.id) {
       return response.status(401).json({ error: 'Anna validi token !' })
     }
+    console.log('BLOG_ID:')
     console.log(blog)
     console.log(decodedToken)
 
-    if (blog.user.toString() === decodedToken.id.toString()) {
+    if (blog.user.toString() === decodedToken.id.toString() || blog.user.length < 1) {
       await Blog.findByIdAndRemove(request.params.id)
       response.status(204).end()
     }
@@ -118,6 +118,7 @@ blogRouter.put('/:id', (request, response) => {
 
   Blog
     .findByIdAndUpdate(request.params.id, newBlog, { new: true } )
+    .populate('user', { username: 1, name: 1 })
     .then(updatedBlog => {
       console.log(updatedBlog)
       response.json(Blog.format(updatedBlog))

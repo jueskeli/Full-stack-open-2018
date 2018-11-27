@@ -1,8 +1,11 @@
 import React from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Notification from './components/notification'
 import loginService from './services/loginService'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/blogForm'
+import Togglable from './components/togglable'
+import BlogToggler from './components/blogToggler'
 
 class App extends React.Component {
   constructor(props) {
@@ -28,7 +31,7 @@ class App extends React.Component {
         this.setState({ blogs: returnBlogs })
       })
 
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({ user })
@@ -36,8 +39,38 @@ class App extends React.Component {
     }    
   }
 
+  like = (blog) => (event) => {
+    event.preventDefault()
+
+    const newBlog = {
+      user:   blog.user[0]._id,
+      likes:  blog.likes + 1,
+      author: blog.author,
+      title:  blog.title,
+      url:    blog.url
+    }
+    
+    blogService
+      .update(blog.id, newBlog)
+      .then(returnBlog => {
+        console.log(returnBlog)
+        this.setState({
+          blogs: this.state.blogs.map(function(b) {return b.id !== blog.id ? b : returnBlog}),
+          success: true,
+          message: `blog ${blog.title} by ${blog.author} updated`
+        })
+        setTimeout(() => {
+          this.setState({message: null, success: false})
+        }, 3500)
+      })
+  }
+
+  //Backendiä muokattu siten, että palauttaa taulukon, joka sisältää user olion(kuten get all tapauksessa), pelkän id:n sijaan.
+  //Aikaisempi aiheutti sen, että ilman sivun päivitystä käyttäjän nimi oli undefined.
   addBlog = (event) => {
     event.preventDefault()
+
+    this.blogForm.toggleVisibility()
     const blog = {
       title: this.state.newTitle,
       author: this.state.newAuthor,
@@ -67,18 +100,47 @@ class App extends React.Component {
       })
   }
 
+  delete = (blog) => (event) => {
+    event.preventDefault()
+    const result = window.confirm(`delete blog '${blog.title}' by ${blog.author} ?`)
+
+    if(result){
+      blogService
+        .remove(blog.id)
+        .then(response => {
+          this.setState({
+            blogs: this.state.blogs.filter(b => b.id !== blog.id),
+            success: true,
+            message: `Blog ${blog.title} by ${blog.author} removed`
+          })
+          setTimeout(() => {
+            this.setState({message: null, success: false})
+          }, 3500)
+        })
+        .catch(error => {
+          this.setState({
+            message: `poisto epäonnistui`,
+            blogs: this.state.blogs.filter(b => b.id !== blog.id)
+          })
+        setTimeout(() => {
+            this.setState({message: null})
+          }, 3500)
+      })
+    }
+  }
+
   login = async (event) => {
 
     event.preventDefault()
     try {
-
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
   
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
+      console.log(user)
       this.setState({ 
         username: '',
         password: '',
@@ -98,7 +160,7 @@ class App extends React.Component {
 
   logOut = (event) => {
     event.preventDefault() 
-    window.localStorage.removeItem('loggedNoteappUser')
+    window.localStorage.removeItem('loggedBlogAppUser')
       blogService.setToken(null)
       this.setState({ 
         username: '',
@@ -117,101 +179,69 @@ class App extends React.Component {
   }
 
   render() {
-    const loginForm = () => (
-      <div>
-        <h2>Kirjaudu sisään</h2>
-        <form onSubmit={this.login}>
-          <div>
-            Käyttäjätunnus:
-            <input
-              type='text'
-              name='username'
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <div>
-            Salasana:
-            <input
-              type='password'
-              name='password'
-              value={this.state.password}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <button>Kirjaudu sisään</button>
-        </form>
-      </div>
-    )
-
     const blogForm = () => (
-      <div>
-        <h2>Uusi blogimerkintä:</h2>
-
-        <form onSubmit={this.addBlog}>
-          <div>
-            Nimi
-            <input
-              type = 'text'
-              name = 'newTitle'
-              value = {this.state.newTitle}
-              onChange = {this.handleBlogChange}
-            />
-          </div>
-          <div>
-          Kirjoittaja
-            <input
-              type = 'text'
-              name = 'newAuthor'
-              value = {this.state.newAuthor}
-              onChange = {this.handleBlogChange}
-            />
-          </div>
-          <div>
-            URL
-            <input
-              type = 'text'
-              name = 'newURL'
-              value = {this.state.newURL}
-              onChange = {this.handleBlogChange}
-            />
-          </div>
-          <div>
-            Sisältö
-            <textarea
-              type = 'text'
-              name = 'newContent'
-              value = {this.state.newContent}
-              onChange = {this.handleBlogChange}
-            />
-          </div>
-          <button>tallenna</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="uusi blogi" ref={component => this.blogForm = component}>
+        <BlogForm            
+          handleSubmit={this.addBlog} 
+          handleChange={this.handleBlogChange} 
+          newTitle={this.state.newTitle} 
+          newAuthor={this.state.newAuthor}
+          newURL={this.state.newURL}
+          newContent={this.state.newContent}
+        />
+      </Togglable>
     )
+
+    const blogsToShow = this.state.blogs.sort(function(a, b) {
+      if (a.likes < b.likes) {
+        return 1;
+      }
+      if (a.likes > b.likes) {
+        return -1;
+      }
+      return 0;
+    })
 
     return (
       <div>
-        <h1>BLOGS</h1>
+        <h1>BLOG APPLICATION</h1>
 
        <Notification message={this.state.message} type={this.state.success}/>
 
         {this.state.user === null ?
-            loginForm() :
+            <Togglable buttonLabel="login"> 
+              <LoginForm
+                username={this.state.username}
+                password={this.state.password}
+                handleChange={this.handleLoginFieldChange}
+                handleSubmit={this.login}
+              />
+            </Togglable> :
             <div>
               <div>
-                {this.state.user.name} logged in 
-                 <button onClick={this.logOut}>kirjaudu ulos</button>
+                {this.state.user.name} logged in            
               </div>
+              <button onClick={this.logOut}>kirjaudu ulos</button>
               {blogForm()}
-              {console.log(this.state.blogs)}
-              <h3>blogs added:</h3>
-              {this.state.blogs.map(blog => 
-                <Blog key={blog.id} blog={blog}/>
+              {console.log(blogsToShow)}
+              <h2>blogs added:</h2>
+              {blogsToShow.map(blog => 
+                <BlogToggler 
+                   key={blog.id} 
+                   title={blog.title}
+                   likes={blog.likes}  
+                   author={blog.author} 
+                   like={this.like(blog)} 
+                   delete={this.delete(blog)}
+                   username={blog.user[0] !== undefined ? blog.user[0].username : ''} 
+                   user={this.state.user.username} 
+                   url={blog.url}>
+                </BlogToggler>
               )}
-
             </div>
         }
+        <ul>This is a blog application made for the FullStack Open 2018 course.</ul>
+        <ul>Author: Juuso-Julius Eskelinen</ul>
       </div>
     );
   }
