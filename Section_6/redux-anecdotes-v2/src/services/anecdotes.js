@@ -7,12 +7,12 @@ const getAll = async () => {
   return response.data
 }
 
-const createNew = async (content) => {
-  const response = await axios.post(url, { content , votes: 0 })
+const createNew = async (content, author) => {
+  const response = await axios.post(url, { content , votes: 0 , author })
   return response.data
 }
 
-const update = async (id, newAnec) => {
+const update = async (id, newAnec,) => {
   console.log(' PUT_ID:', id)
   console.log(' PUT:', newAnec)
   console.log(`${url}/${id}`)

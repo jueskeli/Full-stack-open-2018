@@ -3,14 +3,6 @@ import { clear } from './../reducers/anecdoteReducer'
 import { connect } from 'react-redux'
 
 class Notification extends React.Component {
-
-  show = (message) => {
-    setTimeout(() => {
-      this.props.clear()
-    }, 3500)
-    return message
-  }
-
   render() {
     const style = {
       border: 'solid',
@@ -25,7 +17,7 @@ class Notification extends React.Component {
 
     return (
       <div style={style}>
-        {this.show(message)}
+        {this.props.message}
       </div>
     )
   }

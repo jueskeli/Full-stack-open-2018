@@ -1,6 +1,18 @@
-import { createStore } from 'redux'
-import reducer from './reducers/anecdoteReducer'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 
-const store = createStore(reducer)
+import { anecdoteReducer, notificationReducer, filterReducer } from './reducers/anecdoteReducer'
+
+const reducer = combineReducers({
+  anecdotes: anecdoteReducer,
+  message: notificationReducer,
+  filter: filterReducer
+})
+
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk)
+)
 
 export default store
+
