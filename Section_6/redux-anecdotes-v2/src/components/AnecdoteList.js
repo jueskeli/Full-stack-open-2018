@@ -1,38 +1,46 @@
 import React from 'react'
 import { vote, msg } from './../reducers/anecdoteReducer'
 import Filter from './../components/Filter'
+import { connect } from 'react-redux'
+import anecdoteService from '../services/anecdotes'
 
-class AnecdoteList extends React.Component {
-
-
-  handleKlik = (id) => (e) => {
-    e.preventDefault()
-    this.props.store.dispatch(vote(id))
-    this.props.store.dispatch(msg('Voted anecdote'))
-  }
-
-  render() {
-    const anecdotes = this.props.store.getState().anecdotes.filter(a => a.content.includes(this.props.store.getState().filter))
-    return (
-      <div>
-        <Filter store={this.props.store} anecdotes={anecdotes} />
-        <h2>Anecdotes</h2>
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
-          <div key={anecdote.id}>
-            <div>
-              {anecdote.content}
-            </div>
-            <div>
-              has {anecdote.votes}
-              <button onClick={this.handleKlik(anecdote.id)}>
-                vote
-              </button>
-            </div>
+const AnecdoteList = (props) => {
+  return (
+    <div>
+      <Filter />
+      <h2>Anecdotes</h2>
+      {props.anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
+        <div key={anecdote.id}>
+          <div>
+            {anecdote.content}
           </div>
-        )}
-      </div>
-    )
+          <div>
+              has {anecdote.votes}
+            <button onClick={ async () => {
+              anecdote.votes = anecdote.votes + 1
+              const updatedAnec = await anecdoteService.update(anecdote.id, anecdote)
+              console.log('AFTER_PUT:', anecdote)
+              props.vote(updatedAnec)
+              props.msg('Voted anecdote')}}>
+                vote
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const mapStateToProps = (state) => {
+  console.log('A :', state.anecdotes)
+  return {
+    anecdotes: state.anecdotes.filter(a => a.content.includes(state.filter))
   }
 }
 
-export default AnecdoteList
+const ConnectedList = connect(
+  mapStateToProps,
+  { vote, msg }
+)(AnecdoteList)
+
+export default ConnectedList

@@ -1,17 +1,12 @@
 import React from 'react'
 import { clear } from './../reducers/anecdoteReducer'
+import { connect } from 'react-redux'
 
 class Notification extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      show: true
-    }
-  }
 
   show = (message) => {
     setTimeout(() => {
-      this.props.store.dispatch(clear())
+      this.props.clear()
     }, 3500)
     return message
   }
@@ -23,7 +18,7 @@ class Notification extends React.Component {
       borderWidth: 1
     }
 
-    const message = this.props.store.getState().message
+    const message = this.props.message
     console.log('MESG:', message)
 
     if(message === '') return null
@@ -36,4 +31,15 @@ class Notification extends React.Component {
   }
 }
 
-export default Notification
+const mapStateToProps = (state) => {
+  return {
+    message: state.message
+  }
+}
+
+const ConnectedNotification = connect(
+  mapStateToProps,
+  { clear }
+)(Notification)
+
+export default ConnectedNotification

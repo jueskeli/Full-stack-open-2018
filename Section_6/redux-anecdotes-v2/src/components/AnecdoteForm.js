@@ -1,13 +1,17 @@
 import React from 'react'
 import { createAnecdote , msg } from './../reducers/anecdoteReducer'
+import { connect } from 'react-redux'
+import anecdoteService from '../services/anecdotes'
 
 class AnecdoteForm extends React.Component {
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
-    this.props.store.dispatch(createAnecdote(content))
-    this.props.store.dispatch(msg('Added anecdote'))
     e.target.anecdote.value = ''
+    const newAnec = await anecdoteService.createNew(content)
+    console.log('NEW_ANEC:', newAnec)
+    this.props.createAnecdote(newAnec)
+    this.props.msg('Added anecdote')
   }
 
   render() {
@@ -23,4 +27,9 @@ class AnecdoteForm extends React.Component {
   }
 }
 
-export default AnecdoteForm
+const ConnectedForm = connect(
+  null,
+  { createAnecdote, msg }
+)(AnecdoteForm)
+
+export default ConnectedForm
