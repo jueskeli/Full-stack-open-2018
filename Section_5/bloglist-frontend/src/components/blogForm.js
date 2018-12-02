@@ -1,46 +1,45 @@
 import React from 'react'
+import { Form, Button } from 'semantic-ui-react'
+
 
 const BlogForm = ({ handleSubmit, handleChange, newTitle, newAuthor, newURL, newContent }) => {    
     return(
-      <div>
+       <Form onSubmit={handleSubmit}>
         <h2>Uusi blogimerkintä:</h2>
-
-        <form onSubmit={handleSubmit}>
-          <div>
-            Nimi
+          <Form.Field>
+            <label>Nimi</label>
             <input
               name = 'newTitle'
               value = {newTitle}
               onChange = {handleChange}
             />
-          </div>
-          <div>
-          Kirjoittaja
+          </Form.Field>
+          <Form.Field>
+            <label>Kirjoittaja</label>
             <input
               name = 'newAuthor'
               value = {newAuthor}
               onChange = {handleChange}
             />
-          </div>
-          <div>
-            URL
+          </Form.Field>
+          <Form.Field>
+            <label>URL</label>
             <input
               name = 'newURL'
               value = {newURL}
               onChange = {handleChange}
             />
-          </div>
-          <div>
-            Sisältö
+          </Form.Field>
+          <Form.Field>
+            <label>Sisältö</label>
             <textarea
               name = 'newContent'
               value = {newContent}
               onChange = {handleChange}
             />
-          </div>
-          <button type='submit'>tallenna</button>
-        </form>
-      </div>
+          </Form.Field>
+          <Button type='submit'>tallenna</Button>
+        </Form>
     )
 }
 

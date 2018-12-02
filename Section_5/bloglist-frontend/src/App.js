@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/blogForm'
 import Togglable from './components/togglable'
 import BlogToggler from './components/blogToggler'
+import { Container, Button } from 'semantic-ui-react'
 
 class App extends React.Component {
   constructor(props) {
@@ -202,9 +203,12 @@ class App extends React.Component {
       return 0;
     })
 
+    const style = {marginBottom: 10, marginTop: 10}
+    const heading = {marginBottom: 200,  marginTop: 40}
+
     return (
-      <div>
-        <h1>BLOG APPLICATION</h1>
+      <Container>
+        <h1 style={heading}>BLOG APPLICATION</h1>
 
        <Notification message={this.state.message} type={this.state.success}/>
 
@@ -221,7 +225,7 @@ class App extends React.Component {
               <div>
                 {this.state.user.name} logged in            
               </div>
-              <button onClick={this.logOut}>kirjaudu ulos</button>
+              <Button style={style} onClick={this.logOut}>kirjaudu ulos</Button>
               {blogForm()}
               {console.log(blogsToShow)}
               <h2>blogs added:</h2>
@@ -242,7 +246,7 @@ class App extends React.Component {
         }
         <ul>This is a blog application made for the FullStack Open 2018 course.</ul>
         <ul>Author: Juuso-Julius Eskelinen</ul>
-      </div>
+      </Container>
     );
   }
 }

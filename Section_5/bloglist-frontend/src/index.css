@@ -43,18 +43,6 @@ td {
   font-size: 15px;
 }
 
-.delete {
-    background: rgba(255, 0, 0, 0.678);
-}
-
-.cancel {
-  background: rgba(255, 0, 0, 0.733);
-}
-
-.like {
-  background: rgba(52, 132, 207, 0.699);
-}
-
 .error {
   color: red;
   background: lightgrey;
@@ -90,19 +78,6 @@ button{
     margin: 10px;
 }
 
-input, textarea {
- display: block;
- width: 90%;
- font-size: 16px;
- line-height: 1.25;
- color: #55595c;
- background-color: rgba(255, 255, 255, 0.692);
- border-top: 1px solid $color-grey;
- border-right: 1px solid $color-grey;
- border-bottom: 1px solid $color-grey;
- border-left: 1px solid $color-grey;
-}
-
 p {
     color: rgb(2, 0, 109);
     font-size: 22px;
@@ -130,12 +105,4 @@ li {
 
 textarea {
  resize: vertical;
-}
-
-form {
-    max-width: 50%;
-    background-color: rgba(153, 153, 153, 0.781);
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07);
 }

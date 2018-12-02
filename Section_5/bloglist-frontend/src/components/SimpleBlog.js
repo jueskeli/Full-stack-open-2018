@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'semantic-ui-react'
 
 const SimpleBlog = ({ blog, onClick }) => (
   <div>
@@ -7,7 +8,7 @@ const SimpleBlog = ({ blog, onClick }) => (
     </div>
     <div className='likes'>
       blog has {blog.likes} likes
-      <button onClick={onClick}>like</button>
+      <Button onClick={onClick}>like</Button>
     </div>
   </div>
 )
