@@ -25,17 +25,31 @@ class AnecdoteForm extends React.Component {
   }
 
   render() {
+    const form ={
+      maxWidth: 400,
+      background: 'lightgrey',
+      borderRadius: 5,
+      padding: 5
+    }
+
+    const input = {
+      display: 'block',
+      width: 300,
+      fontSize: 16,
+      padding: 5,
+      marginBottom: 10
+    }
 
     if (this.state.added) {
       return <Redirect to="/anecdotes" />
     }
 
     return (
-      <div>
+      <div style={form}>
         <h2>create new</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>Sisältö :<input name='anecdote'/></div>
-          <div>Tekijä :<input name='author'/></div>
+        <form onSubmit={this.handleSubmit} >
+          <div>Sisältö :<input style={input} name='anecdote'/></div>
+          <div>Tekijä :<input style={input} name='author'/></div>
           <button>create</button>
         </form>
       </div>

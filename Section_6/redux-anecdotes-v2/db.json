@@ -38,7 +38,7 @@
     },
     {
       "content": "Optimoinnin perusteet: Jos olet aloitteleva ohjelmoija: \"Älä!\". Jos olet kokenut ohjelmoija : \"Älä vielä\"",
-      "votes": 20,
+      "votes": 23,
       "id": 11,
       "author": "juuso"
     },
@@ -47,6 +47,12 @@
       "votes": 15,
       "id": 12,
       "author": "juuso"
+    },
+    {
+      "content": "Uusi anekdootti",
+      "votes": 0,
+      "author": "Juuso",
+      "id": 13
     }
   ]
 }

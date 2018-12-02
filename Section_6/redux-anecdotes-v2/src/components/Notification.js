@@ -6,6 +6,9 @@ class Notification extends React.Component {
   render() {
     const style = {
       border: 'solid',
+      color: 'green',
+      background: 'lightgrey',
+      borderRadius: 5,
       padding: 10,
       borderWidth: 1
     }
